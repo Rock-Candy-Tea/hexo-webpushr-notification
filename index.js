@@ -2,7 +2,7 @@
 /* eslint no-param-reassign:0, strict:0 */
 'use strict';
 
-const util = require('hexo-util');
+var util = require('hexo-util');
 var fs = require('hexo-fs');
 var url = require("url")
 var request = require('request');
@@ -11,30 +11,31 @@ var moment = require('moment');
 // triggered after hexo generate.
 // this output the newPost.json into public/.
 hexo.on('generateAfter', async function () {
-    var posts = await hexo.locals.get('posts').data
+    var posts = hexo.locals.get('posts').data
     if(hexo.config.webpushr.sort == 'date' ){
-        var dateSortedPosts = await posts.sort(function (a, b) { return b.date - a.date }).map(function (v) { return v })
-        var newPost = dateSortedPosts[0]
+        var dateSortedPosts = posts.sort(function (a, b) { return b.date - a.date }).map(function (v) { return v });
+        var newPost = dateSortedPosts[0];
     }
     else{
-        var updatedSortedPosts = await posts.sort(function (a, b) { return b.updated - a.updated }).map(function (v) { return v })
-        var newPost = updatedSortedPosts[0]
+        var updatedSortedPosts = posts.sort(function (a, b) { return b.updated - a.updated }).map(function (v) { return v });
+        var newPost = updatedSortedPosts[0];
     };
+    // console.log(newPost);
     var JSONFeed = {
         'title': newPost.title,
         'updated': newPost.updated.format('L') || newPost.date.format('L'),
         'message': newPost.description || util.stripHTML(newPost.excerpt),
         'path': newPost.path,
         'target_url': newPost.permalink,
-        'image': newPost.cover,
+        'image': newPost.cover || hexo.config.webpushr.image,
         'tags': newPost.tags.data.map(function (v) {
             return v.name;
         }),
         'categories': newPost.categories.data.map(function (v) {
             return v.name;
         }),
-        'schedule': newPost.schedule,
-        'expire': newPost.expire,
+        'schedule': newPost.schedule || moment().add(hexo.config.webpushr.delay || 10, 'minutes'),
+        'expire': newPost.expire || hexo.config.webpushr.expire || '7d',
         'auto_hide': newPost.auto_hide || hexo.config.webpushr.auto_hide || '1',
     };
     console.log(JSONFeed);
@@ -51,11 +52,11 @@ hexo.on("deployAfter", async function () {
     // Get newPost.json from your site.
     var newPostOnlineSite = await fetch(url.resolve(hexo.config.url, "newPost.json"));
     var newPostOnlineSite = await newPostOnlineSite.json();
-    newPostOnlineSite = JSON.parse(JSON.stringify(newPostOnlineSite));
+    newPostOnlineSite = await JSON.parse(JSON.stringify(newPostOnlineSite));
     // Get newPost.json from your local.
     var newPostLocal = await fs.readFileSync("public/newPost.json");
     // Get newPost.json from local
-    newPostLocal = JSON.parse(newPostLocal);
+    newPostLocal = await JSON.parse(newPostLocal);
     // console.table({
     //     "From online site": newPostOnlineSite,
     //     "From Local": newPostLocal
@@ -75,11 +76,11 @@ hexo.on("deployAfter", async function () {
                 title: newPostLocal.title,
                 message: newPostLocal.message,
                 target_url: newPostLocal.target_url,
-                image: newPostLocal.image || hexo.config.webpushr.image,
+                image: newPostLocal.image,
                 icon: hexo.config.webpushr.icon,
                 auto_hide: newPostLocal.auto_hide,
-                send_at: moment(newPostLocal.schedule).format() || moment().add(hexo.config.webpushr.delay || 10, 'minutes').format(),
-                expire_push: newPostLocal.expire || hexo.config.webpushr.expire || '7d',
+                send_at: moment(newPostLocal.schedule).format(),
+                expire_push: newPostLocal.expire,
                 segment: topic,
                 action_buttons: [{"title": "前往查看", "url": newPostLocal.target_url},hexo.config.webpushr.action_buttons[0] || {"title": "前往查看", "url": newPostLocal.target_url}]
             };
@@ -124,7 +125,7 @@ hexo.extend.filter.register('after_render:html', data => {
 
 //insert webpushr-sw.js to web root dir
 hexo.on("generateAfter", async function (post) {
-    fs.writeFile(
+    await fs.writeFile(
         "public/webpushr-sw.js",
         "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
     );

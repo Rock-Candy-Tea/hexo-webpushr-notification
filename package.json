@@ -1,7 +1,7 @@
 {
   "name": "hexo-webpushr-notification",
-  "version": "0.0.2",
-  "description": "A hexo plugin helps you notify readers new post update.",
+  "version": "0.0.3",
+  "description": "Hexo push posts update notification automatically With webPushr",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,7 +19,6 @@
     "hexo-fs": "^4.0.0",
     "hexo-util": "^2.7.0",
     "moment": "^2.26.0",
-    "node-fetch": "^3.2.10",
     "request": "^2.88.2"
   },
   "url": "https://blog.ccknbc.cc",

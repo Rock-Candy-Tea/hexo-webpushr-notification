@@ -1,0 +1,32 @@
+{
+  "name": "hexo-webpushr-notification",
+  "version": "0.0.2",
+  "description": "A hexo plugin helps you notify readers new post update.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hexo",
+    "hexo-plugin",
+    "web-push-notification",
+    "web-push",
+    "notification"
+  ],
+  "author": "ccknbc",
+  "license": "ISC",
+  "dependencies": {
+    "hexo-fs": "^4.0.0",
+    "hexo-util": "^2.7.0",
+    "moment": "^2.26.0",
+    "node-fetch": "^3.2.10",
+    "request": "^2.88.2"
+  },
+  "url": "https://blog.ccknbc.cc",
+  "email": "blog@ccknbc.cc",
+  "repository": "git://github.com/Rock-Candy-Tea/hexo-webpushr-notification",
+  "bugs": {
+    "url": "https://github.com/Rock-Candy-Tea/hexo-webpushr-notification",
+    "email": "blog@ccknbc.cc"
+  }
+}

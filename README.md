@@ -23,6 +23,7 @@ webpushr:
   # auto_hide: "0" # 默认为 1，代表true，即自动隐藏
   # sort: "date" # 默认为updated，即只要最新文章更改了更新时间即推送新文章，改为date即发布时间
   # delay: "30" # 默认定时为在 hexo d十分钟后推送，单位为分钟
+  # expire: "5m" # 推送过期时长，默认值为7天，格式如下：'5m'代表5分钟,'5h'代表5小时, '5d'代表5天。(This parameter is used to set the time (in minutes, hours or days) up till which the notification should be attempted if the subscriber is offline. If this is not set, the default value of 4 weeks is used. Pass a number followed by 'm' for minutes, 'h' for hours & 'd' for days. Example: '5d' for 5 days, '50d' for 50 days.)
   # image: # 默认为文章封面，Front-matter 属性为'cover'(butterfly主题友好选项)，如果您没有定义默认封面或此属性，请在这里设置默认image
   action_buttons: # ，默认第一个按钮为前往查看文章，您可也替换第二个按钮相关属性，因参数需求限制（本人太菜）否则将显示两个前往查看按钮
     [

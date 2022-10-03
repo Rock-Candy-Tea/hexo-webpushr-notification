@@ -88,6 +88,7 @@ hexo.on("deployAfter", async function (post) {
                 icon: hexo.config.webpushr.icon,
                 auto_hide: newPostLocal.auto_hide,
                 send_at: moment().add(hexo.config.webpushr.delay || 10, 'minutes').format(),
+                expire_push: hexo.config.webpushr.expire || '7d',
                 segment: topic,
                 action_buttons: [{"title": "前往查看", "url": newPostLocal.target_url},hexo.config.webpushr.action_buttons[0] || {"title": "前往查看", "url": newPostLocal.target_url}]
             };

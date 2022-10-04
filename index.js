@@ -23,7 +23,7 @@ hexo.on('generateAfter', async function () {
     // console.log(newPost);
     var JSONFeed = {
         'title': newPost.title,
-        'updated': newPost.updated.format('L') || newPost.date.format('L'),
+        'updated': newPost.updated.format() || newPost.date.format(),
         'message': newPost.description || util.stripHTML(newPost.excerpt),
         'path': newPost.path,
         'target_url': newPost.permalink,
@@ -70,7 +70,7 @@ hexo.on("deployAfter", async function () {
     if(topic[0] == null) hexo.log.info('未发现指定分类，跳过本次推送');
     else{
         //determine whether to push web notification
-        if (newPostOnlineSite.updated != (newPostLocal.updated  && null)) {
+        if (newPostOnlineSite.updated != (newPostLocal.updated && undefined)) {
             // push new Post notification
             var payload = {
                 title: newPostLocal.title,
@@ -90,7 +90,7 @@ hexo.on("deployAfter", async function () {
                 webpushrAuthToken: hexo.config.webpushr.webpushrAuthToken || process.env.webpushrAuthToken,
                 "Content-Type": "application/json"
             };
-            // hexo.log.info(headers);
+            // console.log(headers);
             var options = {
                 url: 'https://api.webpushr.com/v1/notification/send/segment',
                 method: 'POST',
@@ -109,7 +109,7 @@ hexo.on("deployAfter", async function () {
             }
             request(options, callback);
         } else {
-            hexo.log.info("无文章更新");
+            hexo.log.info("无文章更新 或 为首次推送更新");
         }
     }});
 

@@ -38,7 +38,7 @@ hexo.on('generateAfter', async function () {
         'expire': newPost.expire || hexo.config.webpushr.expire || '7d',
         'auto_hide': newPost.auto_hide || hexo.config.webpushr.auto_hide || '1',
     };
-    console.log(JSONFeed);
+    // console.log(JSONFeed);
     fs.writeFile(
         "public/newPost.json",
         JSON.stringify(JSONFeed),
@@ -70,7 +70,7 @@ hexo.on("deployAfter", async function () {
     if(topic[0] == null) hexo.log.info('未发现指定分类，跳过本次推送');
     else{
         //determine whether to push web notification
-        if (newPostOnlineSite.updated != (newPostLocal.updated && undefined)) {
+        if (newPostOnlineSite.updated !== (newPostLocal.updated && undefined)) {
             // push new Post notification
             var payload = {
                 title: newPostLocal.title,

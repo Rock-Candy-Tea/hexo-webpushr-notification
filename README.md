@@ -1,3 +1,11 @@
+<!--
+ * @Author: CCKNBC ccknbc@qq.com
+ * @Date: 2022-10-02 15:20:31
+ * @LastEditors: CCKNBC ccknbc@qq.com
+ * @LastEditTime: 2022-11-30 20:02:53
+ * @FilePath: \hexo-webpushr-notification\README.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 # hexo-webpushr-notification
 本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改
 感谢原作者 **[@glazec](https://github.com/glazec)**
@@ -14,8 +22,17 @@ npm i hexo-webpushr-notification
 
 ```yaml
 webpushr:
-  # webpushrKey: "webpushrKey" # 出于安全考虑，建议添加至系统环境变量，并注释掉此处配置
-  # webpushrAuthToken: "webpushrAuthToken" # 出于安全考虑，建议添加至系统环境变量，并注释掉此处配置
+  webpushrKey: "webpushrKey"
+  webpushrAuthToken: "webpushrAuthToken"
+
+  # 出于安全考虑，建议将上述两个重要参数添加至系统全局环境变量，并删除或注释掉此处配置
+  # 否则可在网页端向访问者或订阅用户发送推送 https://www.webpushr.com/api-playground
+  # 例如GitHub Actions环境变量配置，参数名不变，密钥名自定义，可参考如下
+  # env:
+  #     webpushrKey: ${{ secrets.WEBPUSHR_KEY }}
+  #     webpushrAuthToken: ${{ secrets.WEBPUSHR_AUTH_TOKEN }}
+  # 如果您的仓库私有，则无需担心此问题
+
   trackingCode: "BB9Y-w9p3u0CKA7UP9nupB6I-_NqE2MuODmKJjyC4W2YflX06Ff_hEhrNJfonrut5l6gCa28gC83q2OII7Qv-oA"
   icon: "https://jsd.cdn.zzko.cn/gh/ccknbc-backup/cdn/image/pwa/192.png" # 必须为192*192 png图片
   # auto_hide: "0" # 默认为 1，代表true，即自动隐藏
@@ -37,10 +54,9 @@ webpushr:
   # 默认为 segment，即根据不同主题推送细分，同时配置上述选项
   # 官方文档参数见 https://docs.webpushr.com/introduction-to-rest-api
   # 例如 all，即推送至所有用户；针对测试，可只推送给单个用户即自己，同时设置 sid 选项
-  sid: "49380720" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
+  sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
 
   # 此外，在文章 Frontmatter 处
   # 可覆盖auto_hide和expire配置，针对特别提醒文章可以设置不自动隐藏及过期时间延长等操作
   # 以及可指定schedule参数（例如：schedule: 2022-10-01 00:00:00），定时推送，而非延时发送
 ```
-

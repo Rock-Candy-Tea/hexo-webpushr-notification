@@ -1,8 +1,8 @@
 {
   "name": "hexo-webpushr-notification",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Hexo push posts update notification automatically With webPushr",
-  "main": "index.js",
+  "main": "webpushr.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,7 +26,7 @@
   "email": "blog@ccknbc.cc",
   "repository": "git://github.com/Rock-Candy-Tea/hexo-webpushr-notification",
   "bugs": {
-    "url": "https://github.com/Rock-Candy-Tea/hexo-webpushr-notification",
+    "url": "https://github.com/Rock-Candy-Tea/hexo-webpushr-notification/issues",
     "email": "blog@ccknbc.cc"
   }
 }

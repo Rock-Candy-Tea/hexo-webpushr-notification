@@ -2,10 +2,9 @@
 /* eslint no-param-reassign:0, strict:0 */
 'use strict';
 
-var util = require('hexo-util');
-var fs = require('hexo-fs');
-var url = require("url")
-var request = require('request');
+const util = require('hexo-util');
+const fs = require('hexo-fs');
+const fetch = require("node-fetch");
 var moment = require('moment');
 
 // triggered after hexo generate.
@@ -51,7 +50,7 @@ hexo.on('generateAfter', async function () {
 hexo.on("deployAfter", async function () {
     // Get newPost.json from your site.
     hexo.log.info("正在获取 本地 与 在线 文章信息");
-    var newPostOnlineSite = await fetch(url.resolve(hexo.config.url, "newPost.json"));
+    var newPostOnlineSite = await fetch((hexo.config.url + "/newPost.json"));
     var newPostOnlineSite = await newPostOnlineSite.json();
     newPostOnlineSite = await JSON.parse(JSON.stringify(newPostOnlineSite));
     // Get newPost.json from your local.
@@ -72,7 +71,7 @@ hexo.on("deployAfter", async function () {
         }
     }
     else if((hexo.config.webpushr.endpoint == 'segment' && (hexo.config.webpushr.categories && hexo.config.webpushr.segment) == (null || undefined))){
-        hexo.log.info('请配置categories及segment');
+        hexo.log.error('请配置categories及segment');
     }
 
     //determine whether to push web notification

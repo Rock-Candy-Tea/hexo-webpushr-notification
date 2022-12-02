@@ -1,9 +1,8 @@
 {
   "name": "hexo-webpushr-notification",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Hexo push posts update notification automatically With webPushr",
   "main": "webpushr.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

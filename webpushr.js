@@ -45,9 +45,28 @@ hexo.on('generateAfter', async function () {
     hexo.log.info("已自动生成: newPost.json");
 });
 
+//insert webpushr-sw.js to web root dir
+hexo.on("generateAfter", async function (post) {
+    await fs.writeFile(
+        "public/webpushr-sw.js",
+        "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
+    );
+    hexo.log.info("已自动生成: webpushr-sw.js");
+});
+
+//insert webpushr tracking code
+hexo.extend.filter.register('after_render:html', data => {
+    var payload = `(function (w, d, s, id) {
+            if (typeof (w.webpushr) !== 'undefined') return; w.webpushr = w.webpushr || function () { (w.webpushr.q = w.webpushr.q || []).push(arguments) }; var js, fjs = d.getElementsByTagName(s)[0]; js = d.createElement(s); js.id = id; js.async = 1; js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window, document, 'script', 'webpushr-jssdk'));webpushr('setup', { 'key': '${hexo.config.webpushr.trackingCode}' });`
+
+    // return data.replace(/<body>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', "<script>"+decodeURI(payload)+"</script></body>"));
+    return data.replace(/<body.+?>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', "<script>" + decodeURI(payload) + "</script></body>"));
+
+});
+
 //triggered before hexo deploy.
 //it compare the newPost.json from your site and local to decide whether push the notification.
-hexo.on("deployAfter", async function () {
+hexo.on("deployBefore", async function () {
     // Get newPost.json from your site.
     hexo.log.info("正在获取 本地 与 在线 文章信息");
     var newPostOnlineSite = await fetch((hexo.config.url + "/newPost.json"));
@@ -123,23 +142,4 @@ hexo.on("deployAfter", async function () {
         }
         request(options, callback);
     }
-});
-
-//insert webpushr tracking code
-hexo.extend.filter.register('after_render:html', data => {
-    var payload = `(function (w, d, s, id) {
-            if (typeof (w.webpushr) !== 'undefined') return; w.webpushr = w.webpushr || function () { (w.webpushr.q = w.webpushr.q || []).push(arguments) }; var js, fjs = d.getElementsByTagName(s)[0]; js = d.createElement(s); js.id = id; js.async = 1; js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window, document, 'script', 'webpushr-jssdk'));webpushr('setup', { 'key': '${hexo.config.webpushr.trackingCode}' });`
-
-    // return data.replace(/<body>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', "<script>"+decodeURI(payload)+"</script></body>"));
-    return data.replace(/<body.+?>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', "<script>" + decodeURI(payload) + "</script></body>"));
-
-});
-
-//insert webpushr-sw.js to web root dir
-hexo.on("generateAfter", async function (post) {
-    await fs.writeFile(
-        "public/webpushr-sw.js",
-        "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
-    );
-    hexo.log.info("已自动生成: webpushr-sw.js");
 });

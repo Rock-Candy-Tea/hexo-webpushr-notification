@@ -1,11 +1,3 @@
-<!--
- * @Author: CCKNBC ccknbc@qq.com
- * @Date: 2022-10-02 15:20:31
- * @LastEditors: CCKNBC ccknbc@qq.com
- * @LastEditTime: 2022-12-01 20:06:41
- * @FilePath: \hexo-webpushr-notification\README.md
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 # hexo-webpushr-notification
 本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改
 感谢原作者 **[@glazec](https://github.com/glazec)**
@@ -50,13 +42,20 @@ webpushr:
   # 以下配置为按订阅主题推送给不同订阅用户，请按照数组形式，一一对应，具体位置请看使用文档
   categories: [工作, 博客, 工具, 生活, 音乐, 学习]
   segment: ["484223", "484224", "484225", "484226", "484227", "484229"]
-  endpoint: segment # 可选配置 all / segment / sid
-  # 默认为 segment，即根据不同主题推送细分，同时配置上述选项
+  # endpoint: segment # 可选配置 all / segment / sid
+  # 默认为 segment，即根据不同主题推送细分，同时配置上述数组选项
   # 官方文档参数见 https://docs.webpushr.com/introduction-to-rest-api
-  # 例如 all，即推送至所有用户；针对测试，可只推送给单个用户即自己，同时设置 sid 选项
+  # 例如 all，即推送至所有用户；针对本地测试，可只推送给单个用户即自己，设为 sid 同时配置下方 sid，但不支持某些参数，仅供测试
   sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
 
   # 此外，在文章 Frontmatter 处
   # 可覆盖auto_hide和expire配置，针对特别提醒文章可以设置不自动隐藏及过期时间延长等操作
   # 以及可指定schedule参数（例如：schedule: 2022-10-01 00:00:00），定时推送，而非延时发送
+```
+
+## 计划
+- [ ] 新增`swInsert`选项，以使用`Service Worker`的其他功能
+
+```yaml
+swInsert: true # 在source文件夹编写你的脚本，文件名为swInsert.js 注意无需监听注册代码
 ```

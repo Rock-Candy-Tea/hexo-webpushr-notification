@@ -51,6 +51,7 @@ hexo.on("generateAfter", async function (post) {
     await fs.writeFile(
         "public/webpushr-sw.js",
         "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
+        // "importScripts('https://cdn.webpushr.com/sw-server.min.js');"+"importScripts("+swInsert+".js);",
     );
     hexo.log.info("已自动生成: webpushr-sw.js");
 });
@@ -82,7 +83,8 @@ hexo.on("deployBefore", async function () {
     //     "本地版本": newPostLocal
     // });
 
-    if ((hexo.config.webpushr.endpoint == 'segment' && (hexo.config.webpushr.categories && hexo.config.webpushr.segment) !== (null || undefined))){
+    var endpoint = hexo.config.webpushr.endpoint || 'segment'
+    if ((endpoint == 'segment' && (hexo.config.webpushr.categories && hexo.config.webpushr.segment) !== (null || undefined))){
         hexo.log.info("正在比较文章分类是否满足分类条件");
         var topic = new Array(newPostLocal.categories.length)
         for (var i = 0; i < topic.length; i++) {
@@ -90,8 +92,8 @@ hexo.on("deployBefore", async function () {
             topic[i] = hexo.config.webpushr.segment[topic[i]];
         }
     }
-    else if((hexo.config.webpushr.endpoint == 'segment' && (hexo.config.webpushr.categories && hexo.config.webpushr.segment) == (null || undefined))){
-        hexo.log.error('请配置categories及segment');
+    else if((endpoint == 'segment' && (hexo.config.webpushr.categories && hexo.config.webpushr.segment) == (null || undefined))){
+        hexo.log.error('默认为按主题推送，需配置categories及segment');
     }
 
     //determine whether to push web notification
@@ -127,7 +129,7 @@ hexo.on("deployBefore", async function () {
         };
         // console.log(headers);
         var options = {
-            url: 'https://api.webpushr.com/v1/notification/send/' + hexo.config.webpushr.endpoint || 'segment',
+            url: 'https://api.webpushr.com/v1/notification/send/' + endpoint,
             method: 'POST',
             headers: headers,
             body: JSON.stringify(payload)

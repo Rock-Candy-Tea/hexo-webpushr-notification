@@ -5,6 +5,7 @@
 const util = require('hexo-util');
 const fs = require('hexo-fs');
 const fetch = require("node-fetch");
+var request = require('request');
 var moment = require('moment');
 
 // triggered after hexo generate.
@@ -100,10 +101,10 @@ hexo.on("deployBefore", async function () {
     else if(topic == (null || undefined) && hexo.config.webpushr.endpoint == 'segment'){
         hexo.log.info('未发现指定分类，已跳过本次推送');
     }
-    else if(newPostOnlineSite[1] == newPostLocal[1]){
+    else if(newPostOnlineSite.updated == newPostLocal.updated){
         hexo.log.info("最新文章更新时间无更改,已跳过本次推送");
     }
-    else if(newPostOnlineSite[1] !== newPostLocal[1]){
+    else if(newPostOnlineSite.updated !== newPostLocal.updated){
         // push new Post notification
         var payload = {
             title: newPostLocal.title,

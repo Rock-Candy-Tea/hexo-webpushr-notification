@@ -42,20 +42,23 @@ webpushr:
   # 以下配置为按订阅主题推送给不同订阅用户，请按照数组形式，一一对应，具体位置请看使用文档
   categories: [工作, 博客, 工具, 生活, 音乐, 学习]
   segment: ["484223", "484224", "484225", "484226", "484227", "484229"]
-  # endpoint: segment # 可选配置 all / segment / sid
-  # 默认为 segment，即根据不同主题推送细分，同时配置上述数组选项
+  # endpoint: sid # 可选配置 all / segment / sid
+  # 默认为 segment，即根据不同主题推送细分，同时配置上述选项
   # 官方文档参数见 https://docs.webpushr.com/introduction-to-rest-api
-  # 例如 all，即推送至所有用户；针对本地测试，可只推送给单个用户即自己，设为 sid 同时配置下方 sid，但不支持某些参数，仅供测试
+  # 例如 all，即推送至所有用户；针对测试，可只推送给单个用户即自己，同时设置 sid 选项
   sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
+
+  sw: "'sw': 'none'" #兼容service worker的其他功能选项（自行注册）
+  # 注释掉即使用wbepushr官方的注册sw脚本，普通用户建议注释掉此选项，并无需往下看，插件会为你搞定
+  # 如果你想自行注册service worker，你需要在你的脚本（例如：sw.js）额外引入官方脚本:
+  # importScripts('https://cdn.webpushr.com/sw-server.min.js');
+  # 如果你不知道如何编写service worker脚本，可以参考以下文章或项目
+  # https://kmar.top/posts/73014407/
+  # https://blog.cyfan.top/p/c0af86bb.html
+  # https://clientworker.js.org/
+  # https://github.com/GoogleChrome/workbox
 
   # 此外，在文章 Frontmatter 处
   # 可覆盖auto_hide和expire配置，针对特别提醒文章可以设置不自动隐藏及过期时间延长等操作
   # 以及可指定schedule参数（例如：schedule: 2022-10-01 00:00:00），定时推送，而非延时发送
-```
-
-## 计划
-- [ ] 新增`swInsert`选项，以使用`Service Worker`的其他功能
-
-```yaml
-swInsert: true # 在source文件夹编写你的脚本，文件名为swInsert.js 注意无需监听注册代码
 ```

@@ -47,23 +47,21 @@ hexo.on('generateAfter', async function () {
 });
 
 //insert webpushr-sw.js to web root dir
-hexo.on("generateAfter", async function (post) {
-    await fs.writeFile(
-        "public/webpushr-sw.js",
-        "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
-        // "importScripts('https://cdn.webpushr.com/sw-server.min.js');"+"importScripts("+swInsert+".js);",
-    );
-    hexo.log.info("已自动生成: webpushr-sw.js");
-});
+if (hexo.config.webpushr.sw == (null || undefined)){
+    hexo.on("generateAfter", async function () {
+        await fs.writeFile(
+            "public/webpushr-sw.js",
+            "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
+        );
+        hexo.log.info("已自动生成: webpushr-sw.js");
+    })};
 
 //insert webpushr tracking code
 hexo.extend.filter.register('after_render:html', data => {
     var payload = `(function (w, d, s, id) {
-            if (typeof (w.webpushr) !== 'undefined') return; w.webpushr = w.webpushr || function () { (w.webpushr.q = w.webpushr.q || []).push(arguments) }; var js, fjs = d.getElementsByTagName(s)[0]; js = d.createElement(s); js.id = id; js.async = 1; js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window, document, 'script', 'webpushr-jssdk'));webpushr('setup', { 'key': '${hexo.config.webpushr.trackingCode}' });`
-
+        if (typeof (w.webpushr) !== 'undefined') return; w.webpushr = w.webpushr || function () { (w.webpushr.q = w.webpushr.q || []).push(arguments) }; var js, fjs = d.getElementsByTagName(s)[0]; js = d.createElement(s); js.id = id; js.async = 1; js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window, document, 'script', 'webpushr-jssdk'));webpushr('setup', { 'key': '${hexo.config.webpushr.trackingCode}', ${hexo.config.webpushr.sw} });`
     // return data.replace(/<body>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', "<script>"+decodeURI(payload)+"</script></body>"));
     return data.replace(/<body.+?>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', "<script>" + decodeURI(payload) + "</script></body>"));
-
 });
 
 //triggered before hexo deploy.
@@ -71,8 +69,22 @@ hexo.extend.filter.register('after_render:html', data => {
 hexo.on("deployBefore", async function () {
     // Get newPost.json from your site.
     hexo.log.info("正在获取 本地 与 在线 文章信息");
-    var newPostOnlineSite = await fetch((hexo.config.url + "/newPost.json"));
-    var newPostOnlineSite = await newPostOnlineSite.json();
+    var newPostOnlineSite = async () => {
+        try {
+            var result = await fetch(hexo.config.url + "/newPost.json")
+            if (result.status < 200 || result.status >= 400)
+                // noinspection ExceptionCaughtLocallyJS
+                throw `拉取时出现异常（${result.status}）`
+            return await result.json()
+        } catch (e) {
+            // noinspection SpellCheckingInspection
+            if (e.code === 'ENOTFOUND')
+                hexo.log.error(`拉取时出现 404，如果您是第一次构建请忽略这个错误`)
+            else throw e
+        }
+    }
+    // var newPostOnlineSite = await fetch(hexo.config.url + "/newPost.json");
+    newPostOnlineSite = await newPostOnlineSite();
     newPostOnlineSite = await JSON.parse(JSON.stringify(newPostOnlineSite));
     // Get newPost.json from your local.
     var newPostLocal = await fs.readFileSync("public/newPost.json");

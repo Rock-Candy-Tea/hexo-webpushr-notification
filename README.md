@@ -3,12 +3,19 @@
 感谢原作者 **[@glazec](https://github.com/glazec)**
 
 ## 安装
+
 推荐使用 `npm` 以插件形式安装
+
 ```bash
 npm i hexo-webpushr-notification
 ```
+
 ## 使用
+
+如果你想了解推送效果，或者如何获取`key`可前往博客查看，否则建议您直接查看配置，因为博客配置内容不会及时更新
 [文档](https://blog.ccknbc.cc/posts/hexo-webpushr-notification/)
+
+## 配置
 
 在hexo配置文件`_config.yml`粘贴如下内容，并按需配置
 
@@ -48,17 +55,32 @@ webpushr:
   # 例如 all，即推送至所有用户；针对测试，可只推送给单个用户即自己，同时设置 sid 选项
   sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
 
-  sw: "'sw': 'none'" #兼容service worker的其他功能选项（自行注册）
-  # 注释掉即使用wbepushr官方的注册sw脚本，普通用户建议注释掉此选项，并无需往下看，插件会为你搞定
-  # 如果你想自行注册service worker，你需要在你的脚本（例如：sw.js）额外引入官方脚本:
-  # importScripts('https://cdn.webpushr.com/sw-server.min.js');
-  # 如果你不知道如何编写service worker脚本，可以参考以下文章或项目
-  # https://kmar.top/posts/73014407/
-  # https://blog.cyfan.top/p/c0af86bb.html
-  # https://clientworker.js.org/
-  # https://github.com/GoogleChrome/workbox
-
   # 此外，在文章 Frontmatter 处
   # 可覆盖auto_hide和expire配置，针对特别提醒文章可以设置不自动隐藏及过期时间延长等操作
   # 以及可指定schedule参数（例如：schedule: 2022-10-01 00:00:00），定时推送，而非延时发送
 ```
+
+## 额外配置
+
+因官方sw脚本注册后，我们无法注册自己的sw脚本，但官方提供了配置，方便我们使用sw的缓存，拦截请求等功能
+因兼容性未知，不确定是否有其他问题，但我个人目前没什么问题，主要是sw脚本编写问题
+
+首先您需要安装`beta`版本插件
+
+```bash
+npm un hexo-webpushr-notification
+npm i hexo-webpushr-notification@beta
+```
+
+然后添加`sw: "none"`配置项
+
+```yaml
+webpushr:
+  sw: "none"
+```
+
+如果你需要了解如何编写service worker脚本，可以参考以下文章或项目
+https://kmar.top/posts/73014407/
+https://blog.cyfan.top/p/c0af86bb.html
+https://clientworker.js.org/
+https://github.com/GoogleChrome/workbox

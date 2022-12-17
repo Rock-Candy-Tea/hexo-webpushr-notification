@@ -65,18 +65,17 @@ webpushr:
 因官方sw脚本注册后，我们无法注册自己的sw脚本，但官方提供了配置，方便我们使用sw的缓存，拦截请求等功能
 因兼容性未知，不确定是否有其他问题，但我个人目前没什么问题，主要是sw脚本编写问题
 
-首先您需要安装`beta`版本插件
-
-```bash
-npm un hexo-webpushr-notification
-npm i hexo-webpushr-notification@beta
-```
-
 然后添加`sw: "none"`配置项
 
 ```yaml
 webpushr:
   sw: "none"
+```
+
+另外，你还需要在你的脚本文件（例如sw.js）中引入
+
+```js
+importScripts('https://cdn.webpushr.com/sw-server.min.js');
 ```
 
 如果你需要了解如何编写service worker脚本，可以参考以下文章或项目

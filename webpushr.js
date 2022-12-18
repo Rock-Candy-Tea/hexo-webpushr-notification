@@ -61,7 +61,7 @@ if (hexo.config.webpushr.sw == (null || undefined))
 //insert webpushr tracking code
 hexo.extend.filter.register('after_render:html', data => {
     var payload = `(function (w, d, s, id) {
-        if (typeof (w.webpushr) !== 'undefined') return; w.webpushr = w.webpushr || function () { (w.webpushr.q = w.webpushr.q || []).push(arguments) }; var js, fjs = d.getElementsByTagName(s)[0]; js = d.createElement(s); js.id = id; js.async = 1; js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window, document, 'script', 'webpushr-jssdk'));webpushr('setup', { 'key': '${hexo.config.webpushr.trackingCode}', ${hexo.config.webpushr.sw} });`
+        if (typeof (w.webpushr) !== 'undefined') return; w.webpushr = w.webpushr || function () { (w.webpushr.q = w.webpushr.q || []).push(arguments) }; var js, fjs = d.getElementsByTagName(s)[0]; js = d.createElement(s); js.id = id; js.async = 1; js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window, document, 'script', 'webpushr-jssdk'));webpushr('setup', { 'key': '${hexo.config.webpushr.trackingCode}', 'sw': '${hexo.config.webpushr.sw}' });`
     // return data.replace(/<body>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', "<script>"+decodeURI(payload)+"</script></body>"));
     return data.replace(/<body.+?>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', "<script>" + decodeURI(payload) + "</script></body>"));
 });
@@ -73,7 +73,7 @@ hexo.on("deployBefore", async function () {
     // Get newPost.json from your site.
     var newPostOnlineSite = async () => {
         try {
-            var result = await fetch("https://ccknbc.cc" + "/newPost.json",
+            var result = await fetch(hexo.config.url + "/newPost.json",
                 {
                 headers: {
                     "Accept": "application/json"
@@ -81,7 +81,9 @@ hexo.on("deployBefore", async function () {
         })
             return result.json()
         } catch (e) {
-            hexo.log.warn(`获取在线版本"newPost.json"失败，状态码: ${result.status}`);
+            return result = await JSON.parse(JSON.stringify(
+                {}
+            ))
         }
     }
     newPostOnlineSite = await newPostOnlineSite();

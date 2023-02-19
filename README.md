@@ -54,7 +54,7 @@ webpushr:
   # 默认为 segment，即根据不同主题推送细分，同时配置上述选项
   # 官方文档参数见 https://docs.webpushr.com/introduction-to-rest-api
   # 例如 all，即推送至所有用户；针对测试，可只推送给单个用户即自己，同时设置 sid 选项
-  # 您也可以将segmen 设置为 all-users 对应的ID，同样也可以实现推送至所有用户
+  # 您也可以将segment 设置为 all-users 对应的ID，同样也可以实现推送至所有用户
   sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
 
   # 此外，在文章 Frontmatter 处

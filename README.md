@@ -21,9 +21,10 @@ npm i hexo-webpushr-notification
 
 ```yaml
 webpushr:
+  enable: true
+
   webpushrKey: "webpushrKey"
   webpushrAuthToken: "webpushrAuthToken"
-
   # 出于安全考虑，建议将上述两个重要参数添加至系统全局环境变量，并删除或注释掉此处配置
   # 否则可在网页端向访问者或订阅用户发送推送 https://www.webpushr.com/api-playground
   # 例如GitHub Actions环境变量配置，参数名不变，密钥名自定义，可参考如下
@@ -49,10 +50,11 @@ webpushr:
   # 以下配置为按订阅主题推送给不同订阅用户，请按照数组形式，一一对应，具体位置请看使用文档
   categories: [工作, 博客, 工具, 生活, 音乐, 学习]
   segment: ["484223", "484224", "484225", "484226", "484227", "484229"]
-  # endpoint: sid # 可选配置 all / segment / sid
+  endpoint: segment # 可选配置 all / segment / sid
   # 默认为 segment，即根据不同主题推送细分，同时配置上述选项
   # 官方文档参数见 https://docs.webpushr.com/introduction-to-rest-api
   # 例如 all，即推送至所有用户；针对测试，可只推送给单个用户即自己，同时设置 sid 选项
+  # 您也可以将segmen 设置为 all-users 对应的ID，同样也可以实现推送至所有用户
   sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
 
   # 此外，在文章 Frontmatter 处
@@ -63,13 +65,13 @@ webpushr:
 ## 额外配置
 
 因官方sw脚本注册后，我们无法注册自己的sw脚本，但官方提供了配置，方便我们使用sw的缓存，拦截请求等功能
-因兼容性未知，不确定是否有其他问题，但我个人目前没什么问题，主要是sw脚本编写问题
+目前的BUG不影响使用，主要是会在非根目录页面请求不存在的`/path/sw.js`文件
 
-首先在配置项中添加`sw: "none"`配置项
+首先在配置项中添加`sw_self: true`配置，开启自行注册sw（默认用户不用添加或者设为`false`）
 
 ```yaml
 webpushr:
-  sw: "none"
+  sw_self: true
 ```
 
 另外，你还需要在你的脚本文件（例如sw.js）中引入
@@ -78,7 +80,9 @@ webpushr:
 importScripts('https://cdn.webpushr.com/sw-server.min.js');
 ```
 
-如果你需要了解如何编写service worker脚本，可以参考以下文章或项目
+完成这些你就可以自行注册你的sw脚本了
+
+如果你需要了解如何编写或者注册service worker脚本，可以参考以下文章或项目
 
 [hexo-swpp](https://kmar.top/posts/73014407/)
 

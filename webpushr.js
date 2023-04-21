@@ -137,19 +137,37 @@ if (hexo.config.webpushr.enable){
             }
             else if(newPostOnlineSite.updated !== newPostLocal.updated){
                 // push new Post notification
-                var payload = {
-                    title: newPostLocal.title,
-                    message: newPostLocal.message,
-                    target_url: newPostLocal.target_url,
-                    image: newPostLocal.image,
-                    icon: hexo.config.webpushr.icon,
-                    auto_hide: newPostLocal.auto_hide,
-                    send_at: moment(newPostLocal.schedule).format(),
-                    expire_push: newPostLocal.expire,
-                    segment: topic,
-                    sid: hexo.config.webpushr.sid,
-                    action_buttons: [{"title": "前往查看", "url": newPostLocal.target_url},hexo.config.webpushr.action_buttons[0] || {"title": "前往查看", "url": newPostLocal.target_url}]
-                };
+                if(hexo.config.webpushr.delay==0)
+                {
+                    var payload = {
+                        title: newPostLocal.title,
+                        message: newPostLocal.message,
+                        target_url: newPostLocal.target_url,
+                        image: newPostLocal.image,
+                        icon: hexo.config.webpushr.icon,
+                        auto_hide: newPostLocal.auto_hide,
+                        expire_push: newPostLocal.expire,
+                        segment: topic,
+                        sid: hexo.config.webpushr.sid,
+                        action_buttons: [{"title": "前往查看", "url": newPostLocal.target_url},hexo.config.webpushr.action_buttons[0] || {"title": "前往查看", "url": newPostLocal.target_url}]
+                    };
+                }
+                else
+                {
+                    var payload = {
+                        title: newPostLocal.title,
+                        message: newPostLocal.message,
+                        target_url: newPostLocal.target_url,
+                        image: newPostLocal.image,
+                        icon: hexo.config.webpushr.icon,
+                        auto_hide: newPostLocal.auto_hide,
+                        send_at: moment(newPostLocal.schedule).format(),
+                        expire_push: newPostLocal.expire,
+                        segment: topic,
+                        sid: hexo.config.webpushr.sid,
+                        action_buttons: [{"title": "前往查看", "url": newPostLocal.target_url},hexo.config.webpushr.action_buttons[0] || {"title": "前往查看", "url": newPostLocal.target_url}]
+                    };
+                }
                 hexo.log.info("正在推送文章更新，请稍等", "\n", "以下是推送内容", payload);
                 var headers = {
                     webpushrKey: process.env.webpushrKey || hexo.config.webpushr.webpushrKey,

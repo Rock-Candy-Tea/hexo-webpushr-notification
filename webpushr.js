@@ -167,7 +167,7 @@ if (hexo.config.webpushr.enable){
                             sid: hexo.config.webpushr.sid
                         };
                     }
-                else if(hexo.config.webpushr.delay == false && hexo.config.webpushr.action_buttons == false)
+                else if(hexo.config.webpushr.delay == '0' && hexo.config.webpushr.action_buttons == false)
                     {
                         var payload = {
                             title: newPostLocal.title,

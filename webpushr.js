@@ -80,9 +80,9 @@ if (hexo.config.webpushr.enable){
     }
 
 
-    //triggered before hexo deploy.
+    //triggered after hexo deploy.
     //it compare the newPost.json from your site and local to decide whether push the notification.
-    hexo.on("deployBefore", async function () {
+    hexo.on("deployAfter", async function () {
         hexo.log.info("正在获取 本地 与 在线 文章信息");
         // Get newPost.json from your site.
         var newPostOnlineSite = async () => {

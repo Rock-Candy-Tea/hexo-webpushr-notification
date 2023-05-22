@@ -7,6 +7,7 @@ const fs = require('hexo-fs');
 const fetch = require("node-fetch");
 var request = require('request');
 var moment = require('moment');
+var ispush = false;
 
 if (hexo.config.webpushr.enable){
     // triggered after hexo generate.
@@ -38,6 +39,7 @@ if (hexo.config.webpushr.enable){
             'schedule': newPost.schedule || moment().add(hexo.config.webpushr.delay || 10, 'minutes'),
             'expire': newPost.expire || hexo.config.webpushr.expire || '7d',
             'auto_hide': newPost.auto_hide || hexo.config.webpushr.auto_hide || '1',
+            'disnotification': newPost.disnotification,
         };
         // console.log(JSONFeed);
         fs.writeFile(
@@ -135,10 +137,30 @@ if (hexo.config.webpushr.enable){
             else if(newPostOnlineSite.updated == newPostLocal.updated){
                 hexo.log.info("最新文章更新时间无更改，已跳过本次推送");
             }
-            else if(newPostOnlineSite.updated !== newPostLocal.updated){
+            else if (newPostLocal.disnotification == true) {
+                hexo.log.info("最新文章已设置不推送，已跳过本次推送");
+            }
+            else if (newPostOnlineSite.updated !== newPostLocal.updated) {
+                ispush = true;
+            }
+        }
+    });
+
+    hexo.on("deployAfter", async function () {
+        if (ispush == true) {
                 // push new Post notification
-                if(hexo.config.webpushr.delay == '0')
-                    {
+            
+            // Get newPost.json from your local.
+            var newPostLocal = await fs.readFileSync("public/newPost.json");
+            // Get newPost.json from local
+            newPostLocal = await JSON.parse(newPostLocal);
+            var endpoint = hexo.config.webpushr.endpoint || 'segment'
+            var topic = new Array(newPostLocal.categories.length)
+            for (var i = 0; i < topic.length; i++) {
+                topic[i] = hexo.config.webpushr.categories.indexOf(newPostLocal.categories[i])
+                topic[i] = hexo.config.webpushr.segment[topic[i]];
+            }
+            if (hexo.config.webpushr.delay == '0') {
                         var payload = {
                             title: newPostLocal.title,
                             message: newPostLocal.message,
@@ -221,6 +243,5 @@ if (hexo.config.webpushr.enable){
                 }
                 request(options, callback);
             }
-        }
     });
 }

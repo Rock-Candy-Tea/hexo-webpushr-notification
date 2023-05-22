@@ -1,5 +1,6 @@
 # hexo-webpushr-notification
-本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改，感谢原作者 **[@glazec](https://github.com/glazec)**。本来是自用插件，且更好的适配 Butterfly 主题，但似乎有人和我有一样的需求，就发布了到了NPM
+
+本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改，感谢原作者 **[@glazec](https://github.com/glazec)** 以及贡献者: **[@GoodBoyboy666](https://github.com/GoodBoyboy666)**
 
 ## 安装
 
@@ -21,7 +22,7 @@ npm install hexo-webpushr-notification
 npm install hexo-webpushr-notification@beta
 ```
 
-当还未经测试时，会在GitHub优先提交及发布 Beta 版本
+当还未经测试时，会在GitHub优先提交及发布 Beta 版本，您Fork修改后也可尝试此种方式测试
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/Rock-Candy-Tea/hexo-webpushr-notification?color=brightgreen&label=github&logo=github) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Rock-Candy-Tea/hexo-webpushr-notification?include_prereleases&logo=github) ![GitHub last commit](https://img.shields.io/github/last-commit/Rock-Candy-Tea/hexo-webpushr-notification?logo=github)
 
@@ -62,13 +63,14 @@ webpushr:
   # delay: "0" # 延时推送，考虑到CDN缓存更新，默认定时为在 hexo d 10分钟后推送，单位为分钟（最短延时为5分钟，设置 0 则会立即推送）
   # expire: "15d" # 推送过期时长，默认值为7天，格式如下：'5m'代表5分钟,'5h'代表5小时, '5d'代表5天.
   # image: # 默认为文章封面，Front-matter 属性为'cover'(butterfly主题友好选项)，如果您没有定义默认封面或此属性，请在这里设置默认image
-  action_buttons: # false # 默认两个按钮为 前往查看 ，您可在下方配置第二个按钮，或者设为 false 不显示按钮（因为隐藏按钮即为文章链接）
-    [
-      {
-        "title": "订阅页面",
-        "url": "https://blog.ccknbc.cc/sub/"
-      }
-    ]
+  action_buttons: # 如果你需要额外自定义按钮 可按照如下格式：
+    # - title: 自定义按钮1 # 当 title 为空值时 默认值为 “前往查看”
+    #   url: https://example.com/button1 # 当 url 为空值时 默认值为 最新文章链接
+    # - title: 自定义按钮2
+    #   url: https://example.com/button2
+    # 最多可配置 3 个按钮，但 action_buttons 为未定义时也默认保留了一个按钮，即前往查看，除非设置为 false
+    # action_buttons: false # 当设为 false 则不显示额外的按钮，因为隐藏按钮即为当前文章链接，所以其实没必要配置
+
   # 以下配置为按订阅主题推送给不同订阅用户，请按照数组形式，一一对应，具体位置请看使用文档
   categories: [工作, 博客, 工具, 生活, 音乐, 学习]
   segment: ["484223", "484224", "484225", "484226", "484227", "484229"]
@@ -79,9 +81,10 @@ webpushr:
   # 您也可以将segment 设置为 all-users 对应的 segment，同样也可以实现推送至所有用户
   sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers，但建议您在测试完毕后注释此选项，以免打扰您
 
-  # 此外，在文章 Frontmatter 处
-  # 可覆盖auto_hide和expire配置，针对特别提醒文章可以设置不自动隐藏及过期时间延长等操作
+  # 此外，在文章 Front-Matter 处
+  # 可覆盖 auto_hide 和 expire 配置，针对需要特别提醒文章可以设置不自动隐藏及过期时间延长等操作
   # 以及可指定schedule参数（例如：schedule: 2022-10-01 00:00:00），定时推送
+  # 当文章头设置 webpushr: false 时，可关闭本篇文章推送，此参数主要防止久远文章更新推送
 ```
 
 ## 额外配置

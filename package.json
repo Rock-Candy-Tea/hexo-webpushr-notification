@@ -1,6 +1,6 @@
 {
   "name": "hexo-webpushr-notification",
-  "version": "0.1.4",
+  "version": "0.1.8",
   "description": "Hexo Push Posts Update Notification Automatically With Webpushr",
   "main": "webpushr.js",
   "scripts": {

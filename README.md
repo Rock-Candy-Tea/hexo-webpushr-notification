@@ -1,19 +1,41 @@
 # hexo-webpushr-notification
-本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改
-感谢原作者 **[@glazec](https://github.com/glazec)**
+本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改，感谢原作者 **[@glazec](https://github.com/glazec)**。本来是自用插件，且更好的适配 Butterfly 主题，但似乎有人和我有一样的需求，就发布了到了NPM
 
 ## 安装
 
-推荐使用 `npm` 以插件形式安装
+![node-current](https://img.shields.io/node/v/hexo?label=%E6%8E%A8%E8%8D%90&logo=node.js&style=for-the-badge)
+
+为方便后续更新，推荐使用 `npm` 以插件形式安装
+
+![npm version](https://img.shields.io/npm/v/hexo-webpushr-notification?color=red&logo=npm) ![npm (beta)](https://img.shields.io/npm/v/hexo-webpushr-notification/beta?logo=npm) ![npm download](https://img.shields.io/npm/dw/hexo-webpushr-notification?logo=npm)
+
+正式版
 
 ```bash
-npm i hexo-webpushr-notification
+npm install hexo-webpushr-notification
+```
+
+测试版
+
+```bash
+npm install hexo-webpushr-notification@beta
+```
+
+当还未经测试时，会在GitHub优先提交及发布 Beta 版本
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/Rock-Candy-Tea/hexo-webpushr-notification?color=brightgreen&label=github&logo=github) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Rock-Candy-Tea/hexo-webpushr-notification?include_prereleases&logo=github) ![GitHub last commit](https://img.shields.io/github/last-commit/Rock-Candy-Tea/hexo-webpushr-notification?logo=github)
+
+```bash
+npm install github:Rock-Candy-Tea/hexo-webpushr-notification
+或
+npm install git@github.com:Rock-Candy-Tea/hexo-webpushr-notification.git
+或
+npm install https://github.com/Rock-Candy-Tea/hexo-webpushr-notification.git
 ```
 
 ## 使用
 
-如果你想了解推送效果，或者如何获取`key`可前往博客查看，否则建议您直接查看配置，因为博客配置内容不会及时更新
-[文档](https://blog.ccknbc.cc/posts/hexo-webpushr-notification/)
+如果你想了解推送效果，或者如何获取`key`可前往博客查看[文档](https://blog.ccknbc.cc/posts/hexo-webpushr-notification/)，否则建议您直接查看配置，因为博客配置内容不会及时更新
 
 ## 配置
 
@@ -37,7 +59,7 @@ webpushr:
   icon: "https://jsd.cdn.zzko.cn/gh/ccknbc-backup/cdn/image/pwa/192.png" # 必须为192*192 png图片
   # auto_hide: "0" # 默认为 1，代表true，即自动隐藏
   # sort: "date" # 默认为updated，即只要最新文章更改了更新时间即推送新文章，改为date即文章第一次发布时间
-  # delay: "30" # 延时推送，考虑到CDN缓存更新，默认定时为在 hexo d 10分钟后推送，单位为分钟（最短延时为5分钟，设置 0 则会立即推送）
+  # delay: "0" # 延时推送，考虑到CDN缓存更新，默认定时为在 hexo d 10分钟后推送，单位为分钟（最短延时为5分钟，设置 0 则会立即推送）
   # expire: "15d" # 推送过期时长，默认值为7天，格式如下：'5m'代表5分钟,'5h'代表5小时, '5d'代表5天.
   # image: # 默认为文章封面，Front-matter 属性为'cover'(butterfly主题友好选项)，如果您没有定义默认封面或此属性，请在这里设置默认image
   action_buttons: # false # 默认两个按钮为 前往查看 ，您可在下方配置第二个按钮，或者设为 false 不显示按钮（因为隐藏按钮即为文章链接）
@@ -65,9 +87,8 @@ webpushr:
 ## 额外配置
 
 因官方sw脚本注册后，我们无法注册自己的sw脚本，但官方提供了配置，方便我们使用sw的缓存，拦截请求等功能
-目前的BUG不影响使用，主要是会在非根目录页面请求不存在的`/path/sw.js`文件
 
-首先在配置项中添加`sw_self: true`配置，开启自行注册sw（默认用户不用添加或者设为`false`）
+需要在配置项中额外添加`sw_self: true`配置，开启自行注册sw（默认用户不用管或者设为`false`）
 
 ```yaml
 webpushr:
@@ -84,10 +105,4 @@ importScripts('https://cdn.webpushr.com/sw-server.min.js');
 
 如果你需要了解如何编写或者注册service worker脚本，可以参考以下文章或项目
 
-[hexo-swpp](https://kmar.top/posts/73014407/)
-
-[Service Worker](https://blog.cyfan.top/p/c0af86bb.html)
-
-[clientworker](https://clientworker.js.org/)
-
-[Workbox](https://github.com/GoogleChrome/workbox)
+[hexo-swpp](https://kmar.top/posts/73014407/) | [Service Worker](https://blog.cyfan.top/p/c0af86bb.html) | [Client Worker](https://clientworker.js.org/) | [Workbox](https://github.com/GoogleChrome/workbox)

@@ -144,7 +144,7 @@ if (hexo.config.webpushr.enable) {
         };
 
         //determine whether to push web notification
-        if (topic == (null || undefined) && endpoint == 'segment') {
+        if (topic[0] < 0 && endpoint == 'segment') {
             hexo.log.info('未发现指定分类，已跳过本次推送');
         }
         else if (newPostOnlineSite.updated == newPostLocal.updated) {

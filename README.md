@@ -57,17 +57,17 @@ webpushr:
   # 如果您的仓库私有，则无需担心此问题
 
   trackingCode: "BB9Y-w9p3u0CKA7UP9nupB6I-_NqE2MuODmKJjyC4W2YflX06Ff_hEhrNJfonrut5l6gCa28gC83q2OII7Qv-oA"
-  icon: "https://jsd.cdn.zzko.cn/gh/ccknbc-backup/cdn/image/pwa/192.png" # 必须为192*192 png图片
+  icon: "https://cdn1.tianli0.top/gh/ccknbc-backup/cdn/image/pwa/192.png" # 必须为192*192 png图片
   # auto_hide: "0" # 默认为 1，代表true，即自动隐藏
   # sort: "date" # 默认为updated，即只要最新文章更改了更新时间即推送新文章，改为date即文章第一次发布时间
-  # delay: "0" # 延时推送，考虑到CDN缓存更新，默认定时为在 hexo d 10分钟后推送，单位为分钟（最短延时为5分钟，设置 0 则会立即推送）
+  # delay: "30" # 延时推送，考虑到CDN缓存更新，默认定时为在 hexo d 10分钟后推送，单位为分钟（最短时间为5min）
   # expire: "15d" # 推送过期时长，默认值为7天，格式如下：'5m'代表5分钟,'5h'代表5小时, '5d'代表5天.
   # image: # 默认为文章封面，Front-matter 属性为'cover'(butterfly主题友好选项)，如果您没有定义默认封面或此属性，请在这里设置默认image
   action_buttons: # 如果你需要额外自定义按钮 可按照如下格式：
-    # - title: 自定义按钮1 # 当 title 为空值时 默认值为 “前往查看”
-    #   url: https://example.com/button1 # 当 url 为空值时 默认值为 最新文章链接
-    # - title: 自定义按钮2
-    #   url: https://example.com/button2
+    - title: 阅读全文 # 当 title 未配置时 默认值为 “前往查看”
+      # url:  # 当 url 未配置时 默认值为 最新文章链接
+    - title: 订阅页面
+      url: https://blog.ccknbc.cc/sub/
     # 最多可配置 3 个按钮，但 action_buttons 为未定义时也默认保留了一个按钮，即前往查看，除非设置为 false
     # action_buttons: false # 当设为 false 则不显示额外的按钮，因为隐藏按钮即为当前文章链接，所以其实没必要配置
 
@@ -77,9 +77,11 @@ webpushr:
   endpoint: segment # 可选配置 all / segment / sid
   # 默认为 segment，即根据不同主题推送细分，同时配置上述选项
   # 官方文档参数见 https://docs.webpushr.com/introduction-to-rest-api
-  # 例如 all，即推送至所有用户；针对测试，可只推送给单个用户即自己，同时配置下方的 sid 选项
-  # 您也可以将segment 设置为 all-users 对应的 segment，同样也可以实现推送至所有用户
-  sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers，但建议您在测试完毕后注释此选项，以免打扰您
+  # 例如 all，即推送至所有用户；针对测试，可只推送给单个用户即自己，同时设置 sid 选项
+  # 您也可以将segment 设置为 all-users 对应的ID，同样也可以实现推送至所有用户
+  sid: "119810055" # 单个用户ID 可在控制台查看 https://app.webpushr.com/subscribers
+
+  sw_self: true #兼容service worker的其他功能选项（自行注册）
 
   # 此外，在文章 Front-Matter 处
   # 可覆盖 auto_hide 和 expire 配置，针对需要特别提醒文章可以设置不自动隐藏及过期时间延长等操作

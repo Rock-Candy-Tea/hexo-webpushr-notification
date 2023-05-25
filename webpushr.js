@@ -1,14 +1,9 @@
-/* global hexo */
-/* eslint no-param-reassign:0, strict:0 */
 'use strict';
 
-// hexo自带
 const util = require('hexo-util');
 const fs = require('hexo-fs');
 const moment = require('moment');
 const axios = require('axios');
-// 尝试抛弃
-const fetch = require("node-fetch");
 
 const endpoint = hexo.config.webpushr.endpoint || 'segment';
 let newPostOnlineSite;
@@ -16,6 +11,7 @@ let topic = [];
 let actionButtons = [];
 
 if (hexo.config.webpushr.enable) {
+    // 生成后排序获得最新文章，并写入本地 newPost.json
     hexo.on('generateAfter', async () => {
         const posts = hexo.locals.get('posts').data;
         const sortBy = hexo.config.webpushr.sort === 'date' ? 'date' : 'updated';
@@ -35,9 +31,7 @@ if (hexo.config.webpushr.enable) {
             auto_hide: newPost.auto_hide || hexo.config.webpushr.auto_hide || '1',
             webpushr: newPost.webpushr
         };
-
         fs.writeFile('public/newPost.json', JSON.stringify(JSONFeed));
-        hexo.log.info('已自动生成: newPost.json');
     });
 
     if (!hexo.config.webpushr.sw_self) {
@@ -48,7 +42,7 @@ if (hexo.config.webpushr.enable) {
     }
 }
 
-//insert webpushr tracking code
+// 生成 html 后插入代码
 hexo.extend.filter.register('after_render:html', data => {
     const { sw_self, trackingCode } = hexo.config.webpushr;
     const sw = sw_self ? 'none' : '';
@@ -66,57 +60,43 @@ hexo.extend.filter.register('after_render:html', data => {
     });
 });
 
-// hexo.on("deployBefore", async () => {
-//     hexo.log.info('正在获取 在线 文章信息');
-//     newPostOnlineSite = async () => {
-//         try {
-//             const result = await axios.get(`${hexo.config.url}/newPost.json`, {
-//                 headers: { Accept: 'application/json' }
-//             });
-//             return result.data.json();
-//         } catch (e) {
-//             return {};
-//         }
-//     };
-
-//     newPostOnlineSite = await newPostOnlineSite();
-//     newPostOnlineSite = JSON.parse(JSON.stringify(newPostOnlineSite));
-//     if (!newPostOnlineSite.updated) {
-//         hexo.log.warn('获取在线版本 "newPost.json" 失败,可能为首次推送更新或站点无法访问,已跳过本次推送');
-//     }
-// });
-
-hexo.on("deployBefore", async function () {
-    hexo.log.info("正在获取 在线 文章信息");
-    // Get newPost.json from your site.
+// 部署前获取在线 newPost.json（旧版本）
+hexo.on("deployBefore", async () => {
+    hexo.log.info('正在获取 在线 文章信息');
     newPostOnlineSite = async () => {
         try {
-            var result = await fetch(hexo.config.url + "/newPost.json",
-                {
-                    headers: {
-                        "Accept": "application/json"
-                    }
-                })
-            return result.json()
+            var result = await axios.get(`${hexo.config.url}/newPost.json`, {
+                headers: { Accept: 'application/json' }
+            });
+            return result.data;
         } catch (e) {
             return result = await JSON.parse(JSON.stringify(
                 {}
             ))
         }
-    }
-    newPostOnlineSite = await newPostOnlineSite();
-    newPostOnlineSite = await JSON.parse(JSON.stringify(newPostOnlineSite));
-    if (newPostOnlineSite.updated == (null || undefined)) {
-        hexo.log.warn('获取在线版本 "newPost.json" 失败，可能为首次推送更新或站点无法访问，已跳过本次推送');
-    }
+    };
 });
 
 hexo.on('deployAfter', async () => {
-    let newPostLocal = await fs.readFileSync('public/newPost.json');
+    // 部署后读取本地和部署前获取到的在线版本 newPost.json
+    var newPostLocal = await fs.readFileSync('public/newPost.json');
     newPostLocal = JSON.parse(newPostLocal);
+    if (!newPostLocal) {
+        hexo.log.warn('获取本地版本 "newPost.json" 失败，可能为未生成文件或读取超时');
+        return false;
+    }
+    newPostOnlineSite = await newPostOnlineSite();
+    newPostOnlineSite = await JSON.parse(JSON.stringify(newPostOnlineSite));
+    if (!newPostOnlineSite) {
+        hexo.log.warn('获取在线版本 "newPost.json" 失败，可能为首次推送更新或站点无法访问');
+        return false;
+    }
+    // console.log('本地版本 \n', newPostLocal);
+    // console.log('在线版本 \n', newPostOnlineSite);
 
+    // 判断文章分类是否属于主题
     function isValidPostCategory() {
-        if (endpoint === 'segment' && hexo.config.webpushr.categories && hexo.config.webpushr.segment) {
+        if (endpoint !== 'all' && hexo.config.webpushr.categories && hexo.config.webpushr.segment) {
             for (var i = 0; i < newPostLocal.categories.length; i++) {
                 topic[i] = hexo.config.webpushr.categories.indexOf(newPostLocal.categories[i]);
                 if (topic[i] === -1) {
@@ -134,32 +114,7 @@ hexo.on('deployAfter', async () => {
      * @returns {boolean} 是否需要推送
      */
     function shouldPushNotification() {
-        if (!newPostOnlineSite) {
-            hexo.log.warn('获取在线文章信息失败,已跳过本次推送');
-            return false;
-        }
-
-        if (newPostOnlineSite.updated == newPostLocal.updated) {
-            hexo.log.info('文章无更新,已跳过本次推送');
-            return false;
-        }
-
-        if (newPostLocal.webpushr === false) {
-            hexo.log.info('本文章配置为不推送,已跳过');
-            return false;
-        }
-
-        if (!isValidPostCategory()) {
-            hexo.log.info('未满足分类条件,已跳过本次推送');
-            return false;
-        }
-
-        if (!endpoint) {
-            hexo.log.error('未配置推送端点,已跳过本次推送');
-            return false;
-        }
-
-        if (endpoint === 'segment' && !hexo.config.webpushr.categories && !hexo.config.webpushr.segment) {
+        if (endpoint !== 'all' && !hexo.config.webpushr.categories && !hexo.config.webpushr.segment) {
             hexo.log.error('默认为按主题推送,需配置categories及segment');
             return false;
         }
@@ -169,15 +124,31 @@ hexo.on('deployAfter', async () => {
             return false;
         }
 
+        if (newPostLocal.webpushr === false) {
+            hexo.log.info('本文章配置为不推送,已跳过');
+            return false;
+        }
+
+        if (newPostOnlineSite.updated == newPostLocal.updated) {
+            hexo.log.info('文章无更新,已跳过本次推送');
+            return false;
+        }
+
+        if (!isValidPostCategory()) {
+            hexo.log.info('未满足分类条件,已跳过本次推送');
+            return false;
+        }
+
         if (newPostOnlineSite.updated !== newPostLocal.updated) {
             hexo.log.info('检测到文章更新,准备推送通知');
             return true;
         }
 
-        hexo.log.error('含有未考虑到的情况，默认不推送');
+        hexo.log.error('含有未考虑到的情况，默认为不推送');
         return false;
     }
 
+    // 满足条件，推送更新通知
     if (shouldPushNotification()) {
         const headers = {
             webpushrKey: process.env.webpushrKey || hexo.config.webpushr.webpushrKey,
@@ -200,7 +171,7 @@ hexo.on('deployAfter', async () => {
         }
 
         if (actionButtons.length > 3) {
-            hexo.log.warn('提示: Webpushr 消息推送只允许 3 个 Action Buttons。本次已取前 3 个按钮，但请检查并修改您的配置');
+            hexo.log.warn('提示: Webpushr 消息推送最多允许 3 个 Action Buttons \n 本次已取前 3 个按钮，但请检查并修改您的配置');
             actionButtons = actionButtons.slice(0, 3);
         }
 

@@ -37,7 +37,6 @@ if (hexo.config.webpushr.enable) {
     if (!hexo.config.webpushr.sw_self) {
         hexo.on('generateAfter', async () => {
             await fs.writeFile('public/webpushr-sw.js', 'importScripts("https://cdn.webpushr.com/sw-server.min.js");');
-            hexo.log.info('已自动生成: webpushr-sw.js');
         });
     }
 }
@@ -62,7 +61,7 @@ hexo.extend.filter.register('after_render:html', data => {
 
 // 部署前获取在线 newPost.json（旧版本）
 hexo.on("deployBefore", async () => {
-    hexo.log.info('正在获取 在线 文章信息');
+    hexo.log.info('正在获取 在线 最新文章信息');
     newPostOnlineSite = async () => {
         try {
             var result = await axios.get(`${hexo.config.url}/newPost.json`, {
@@ -82,13 +81,13 @@ hexo.on('deployAfter', async () => {
     var newPostLocal = await fs.readFileSync('public/newPost.json');
     newPostLocal = JSON.parse(newPostLocal);
     if (!newPostLocal) {
-        hexo.log.warn('获取本地版本 "newPost.json" 失败，可能为未生成文件或读取超时');
+        hexo.log.error('获取本地版本 "newPost.json" 失败，可能为未生成文件或读取超时');
         return false;
     }
     newPostOnlineSite = await newPostOnlineSite();
     newPostOnlineSite = await JSON.parse(JSON.stringify(newPostOnlineSite));
     if (!newPostOnlineSite) {
-        hexo.log.warn('获取在线版本 "newPost.json" 失败，可能为首次推送更新或站点无法访问');
+        hexo.log.error('获取在线版本 "newPost.json" 失败，可能为首次推送更新或站点无法访问');
         return false;
     }
     // console.log('本地版本 \n', newPostLocal);

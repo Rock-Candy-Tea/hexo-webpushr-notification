@@ -21,7 +21,7 @@ if (hexo.config.webpushr.enable) {
 
         const JSONFeed = {
             title: newPost.title,
-            updated: newPost.updated,
+            updated: newPost.updated.format(),
             message: newPost.description || util.stripHTML(newPost.excerpt),
             target_url: newPost.permalink,
             image: newPost.cover || hexo.config.webpushr.image,
@@ -113,8 +113,8 @@ if (hexo.config.webpushr.enable) {
          * @returns {boolean} 是否需要推送
          */
         function shouldPushNotification() {
-            if (endpoint == 'segment' && !hexo.config.webpushr.categories && !hexo.config.webpushr.segment) {
-                hexo.log.error('默认为按主题推送,需配置categories及segment');
+            if (newPostLocal.webpushr === false) {
+                hexo.log.info('本文章配置为不推送,已跳过已跳过本次推送');
                 return false;
             }
 
@@ -123,8 +123,13 @@ if (hexo.config.webpushr.enable) {
                 return false;
             }
 
-            if (newPostLocal.webpushr === false) {
-                hexo.log.info('本文章配置为不推送,已跳过');
+            if (endpoint == 'segment' && !hexo.config.webpushr.categories && !hexo.config.webpushr.segment) {
+                hexo.log.error('默认为按主题推送,需配置categories及segment');
+                return false;
+            }
+
+            if (endpoint === 'segment' && !isValidPostCategory()) {
+                hexo.log.info('未满足分类条件,已跳过本次推送');
                 return false;
             }
 
@@ -133,18 +138,8 @@ if (hexo.config.webpushr.enable) {
                 return false;
             }
 
-            if (!isValidPostCategory()) {
-                hexo.log.info('未满足分类条件,已跳过本次推送');
-                return false;
-            }
-
-            if (newPostOnlineSite.updated !== newPostLocal.updated) {
-                hexo.log.info('检测到文章更新,准备推送通知');
-                return true;
-            }
-
-            hexo.log.error('含有未考虑到的情况，默认为不推送');
-            return false;
+            hexo.log.info('检测到文章更新,准备推送通知');
+            return true;
         }
 
         // 满足条件，推送更新通知

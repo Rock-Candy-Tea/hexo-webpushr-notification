@@ -1,12 +1,12 @@
 # hexo-webpushr-notification
 
-本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改，感谢原作者 **[@glazec](https://github.com/glazec)**。如果使用有问题或者好的想法，欢迎PR，因为本人是菜鸡！
+本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改，感谢原作者 **[@glazec](https://github.com/glazec)**
 
 ## 注意
 
 > 0.2.0 版本即将发布，与最新版本无较大差异，待逻辑测试没问题后发布版本
-若您从旧版本升级至最新版本，请注意查看配置项变更
-主要是 `action_buttons` 及 `delay` 的配置
+> 若您从旧版本升级至最新版本，请注意查看配置项变更及简化
+> 主要是 `action_buttons` 配置的自定义程度更高，当然您可以继续使用原配置方式
 
 当文章头设置 `webpushr: false` 时，可关闭本篇文章推送，此参数主要防止久远文章更新推送
 
@@ -32,7 +32,7 @@ npm i hexo-webpushr-notification
 npm i hexo-webpushr-notification@beta
 ```
 
-当还未经测试时，会在GitHub优先提交及发布 Beta 版本，您Fork修改后也可尝试此种方式测试
+当还未经测试时，会在 GitHub 优先提交及发布 Beta 版本，您 Fork 修改后也可尝试此种方式测试
 
 [![GitHub package.json version](https://img.shields.io/github/package-json/v/Rock-Candy-Tea/hexo-webpushr-notification?color=brightgreen&label=github&logo=github)](https://github.com/Rock-Candy-Tea/hexo-webpushr-notification) [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Rock-Candy-Tea/hexo-webpushr-notification?include_prereleases&logo=github)](https://github.com/Rock-Candy-Tea/hexo-webpushr-notification/releases) [![GitHub last commit](https://img.shields.io/github/last-commit/Rock-Candy-Tea/hexo-webpushr-notification?logo=github)](https://github.com/Rock-Candy-Tea/hexo-webpushr-notification)
 
@@ -46,7 +46,7 @@ npm i github:Rock-Candy-Tea/hexo-webpushr-notification
 
 ## 配置
 
-在hexo配置文件`_config.yml`粘贴如下内容，并按需配置
+在 hexo 配置文件`_config.yml`粘贴如下内容，并按需配置
 
 ```yaml
 webpushr:
@@ -94,23 +94,33 @@ webpushr:
 
 ## 额外配置
 
-因官方sw脚本注册后，我们无法注册自己的sw脚本，但官方提供了配置，方便我们使用sw的缓存，拦截请求等功能
+因官方 sw 脚本注册后，我们无法注册自己的 sw 脚本，但官方提供了配置，方便我们使用 sw 的缓存，拦截请求等功能
 
-需要在配置项中额外添加`sw_self: true`配置，开启自行注册sw（默认用户不用管或者设为`false`）
+需要在配置项中额外添加`sw_self: true`配置，开启自行注册 sw（默认用户不用管或者设为`false`）
 
 ```yaml
 webpushr:
   sw_self: true
 ```
 
-另外，你还需要在你的脚本文件（例如sw.js）中引入
+另外，你还需要在你的脚本文件（例如 sw.js）中引入
 
 ```js
-importScripts('https://cdn.webpushr.com/sw-server.min.js');
+importScripts("https://cdn.webpushr.com/sw-server.min.js");
 ```
 
-完成这些你就可以自行注册你的sw脚本了
+完成这些你就可以自行注册你的 sw 脚本了
 
-如果你需要了解如何编写或者注册service worker脚本，可以参考以下文章或项目
+如果你需要了解如何编写或者注册 service worker 脚本，可以参考以下文章或项目
 
 [hexo-swpp](https://kmar.top/posts/73014407/) | [Service Worker](https://blog.cyfan.top/p/c0af86bb.html) | [Client Worker](https://clientworker.js.org/) | [Workbox](https://github.com/GoogleChrome/workbox)
+
+## 自行修改
+
+你也可以自定义修改 `webpushr.js` 文件后，再安装相关需要依赖，然后将文件放到 Hexo 的 `scripts` 目录下即可正常运行
+
+对于 0.2.0 以上版本，您只需要在 Hexo 所在目录安装 `axios` 即可，这样测试相较于安装 `GitHub` 更方便（以及欢迎 `PR` ）
+
+```bash
+npm i axios
+```

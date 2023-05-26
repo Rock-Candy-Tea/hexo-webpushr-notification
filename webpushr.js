@@ -43,15 +43,27 @@ if (hexo.config.webpushr.enable) {
 
     // 生成 html 后插入代码
     hexo.extend.filter.register('after_render:html', data => {
-        var setupScript = `(function (w, d, s, id) {
-            if (typeof (w.webpushr) !== 'undefined') return; w.webpushr = w.webpushr || function () { (w.webpushr.q = w.webpushr.q || []).push(arguments) }; var js, fjs = d.getElementsByTagName(s)[0]; js = d.createElement(s); js.id = id; js.async = 1; js.src = "https://cdn.webpushr.com/app.min.js";fjs.parentNode.appendChild(js);}(window, document, 'script', 'webpushr-jssdk'));`;
-        var setupOptions = { 'key': '${hexo.config.webpushr.trackingCode}' };
-        if (hexo.config.webpushr.sw_self === true) {
-            setupOptions.sw = 'none';
-        }
-        var payload = `${setupScript}webpushr('setup', ${JSON.stringify(setupOptions)});`;
+        var swOption = (hexo.config.webpushr.sw_self == true) ? "'none'" : "undefined";
+
+        var payload = `(function (w, d, s, id) {
+        if (typeof (w.webpushr) !== 'undefined') return;
+        w.webpushr = w.webpushr || function () { (w.webpushr.q = w.webpushr.q || []).push(arguments) };
+        var js, fjs = d.getElementsByTagName(s)[0];
+        js = d.createElement(s);
+        js.id = id;
+        js.async = 1;
+        js.src = "https://cdn.webpushr.com/app.min.js";
+        fjs.parentNode.appendChild(js);
+        }(window, document, 'script', 'webpushr-jssdk'));
+
+        webpushr('setup', {
+        'key': '${hexo.config.webpushr.trackingCode}',
+        'sw': ${swOption}
+        });
+        `;
         return data.replace(/<body.+?>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', `<script>${decodeURI(payload)}</script></body>`));
     });
+
 
     // 部署前获取在线 newPost.json（旧版本）
     hexo.on("deployBefore", async () => {

@@ -12,7 +12,7 @@ let topic = [];
 let actionButtons = [];
 
 if (config.enable) {
-    // 排序获得最新文章信息，并写入本地文件
+    // 排序获得最新文章信息，并写入本地 newPost.json 文件
     hexo.on('generateAfter', async () => {
         const posts = hexo.locals.get('posts').data;
         const sortBy = config.sort === 'date' ? 'date' : 'updated';
@@ -35,7 +35,7 @@ if (config.enable) {
         fs.writeFile('public/newPost.json', JSON.stringify(JSONFeed));
     });
 
-    // 生成 sw-js 文件
+    // 自动生成 webpushr-sw.js 文件
     if (!config.sw_self) {
         hexo.on('generateAfter', async () => {
             await fs.writeFile('public/webpushr-sw.js', 'importScripts("https://cdn.webpushr.com/sw-server.min.js");');
@@ -64,7 +64,6 @@ if (config.enable) {
         `;
         return data.replace(/<body.+?>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', `<script>${decodeURI(payload)}</script></body>`));
     });
-
 
     // 部署前获取在线 newPost.json（旧版本）
     hexo.on("deployBefore", async () => {
@@ -97,12 +96,6 @@ if (config.enable) {
             hexo.log.error('获取在线版本 "newPost.json" 失败，可能为首次推送更新或站点无法访问');
             return false;
         }
-        // console.table({
-        //     "在线版本": newPostOnlineSite,
-        //     "本地版本": newPostLocal
-        // });
-        // console.log('本地版本 \n', newPostLocal);
-        // console.log('在线版本 \n', newPostOnlineSite);
 
         // 判断文章分类是否属于主题
         function isValidPostCategory() {
@@ -135,7 +128,7 @@ if (config.enable) {
             }
 
             if (endpoint == 'segment' && !config.categories && !config.segment) {
-                hexo.log.error('默认为按主题推送,需配置categories及segment');
+                hexo.log.error('默认为按主题推送,需配置 categories 及 segment');
                 return false;
             }
 

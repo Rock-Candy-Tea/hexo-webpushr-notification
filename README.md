@@ -58,8 +58,8 @@ webpushr:
   # Otherwise, you can send pushes to visitors or subscribers on the webpage https://www.webpushr.com/api-playground
   # For example, GitHub Actions environment variable configuration, the parameter names remain unchanged, the key names can be customized, as shown below
   # env:
-  #     webpushrKey: ${{ secrets.WEBPUSHR_KEY }}
-  #     webpushrAuthToken: ${{ secrets.WEBPUSHR_AUTH_TOKEN }}
+  #     webpushrKey: ${{ secrets.WEBPUSHRKEY }}
+  #     webpushrAuthToken: ${{ secrets.WEBPUSHRAUTHTOKEN }}
   # If your repository is private, you do not need to worry about this issue.
 
   trackingCode: "trackingCode"

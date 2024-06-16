@@ -169,8 +169,8 @@ if (config.enable) {
             }
 
             if (actionButtons.length > 3) {
-                hexo.log.warn('hexo-webpushr-notification: Tip: It is not recommended that you configure too many buttons');
-                hexo.log.info('hexo-webpushr-notification: The first 3 buttons have been intercepted this time, and it is recommended that you modify your configuration');
+                // hexo.log.warn('hexo-webpushr-notification: Tip: It is not recommended that you configure too many buttons');
+                // hexo.log.info('hexo-webpushr-notification: The first 3 buttons have been intercepted this time, and it is recommended that you modify your configuration');
                 actionButtons = actionButtons.slice(0, 3);
             }
 
@@ -215,11 +215,11 @@ if (config.enable) {
             axios.post(`https://api.webpushr.com/v1/notification/send/${endpoint}`, payload, { headers })
                 .then(res => {
                     hexo.log.info(`《${newPostLocal.title}》Push update successfully!`);
-                    hexo.log.info('hexo-webpushr-notification: The following is the interface return information:', res.data);
+                    // hexo.log.info('hexo-webpushr-notification: The following is the interface return information:', res.data);
                 })
                 .catch(err => {
                     hexo.log.error(`《${newPostLocal.title}》Failed to push update!`);
-                    hexo.log.error('hexo-webpushr-notification: The following is the interface return information', err.response.data);
+                    //hexo.log.error('hexo-webpushr-notification: The following is the interface return information', err.response.data);
                 });
         }
     });

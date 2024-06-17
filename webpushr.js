@@ -62,7 +62,10 @@ if (config.enable) {
         'sw': ${swOption}
         });
         `;
-        return data.replace(/<body.+?>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', `<script>${decodeURI(payload)}</script></body>`));
+        
+        return data;
+        // disabled the functionality to add the javascript at the end delegating that functionality to a consent manager 
+        //return data.replace(/<body.+?>(?!<\/body>).+?<\/body>/s, str => str.replace('</body>', `<script>${decodeURI(payload)}</script></body>`));
     });
 
     // Get online newPost.json (old version) before deploying

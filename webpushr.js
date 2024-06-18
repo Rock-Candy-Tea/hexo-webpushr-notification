@@ -23,7 +23,7 @@ if (config.enable) {
         const JSONFeed = {
             title: newPost.title,
             updated: newPost.updated.format(),
-            message: newPost.excerpt || util.stripHTML(newPost.excerpt), // trying with excerpt
+            message: newPost.description || util.stripHTML(newPost.excerpt),
             target_url: newPost.permalink,
             image: newPost.cover || config.image,
             categories: newPost.categories.data.map(v => v.name),

@@ -23,7 +23,7 @@ if (config.enable) {
         const JSONFeed = {
             title: newPost.title,
             updated: newPost.updated.format(),
-            message: newPost.description || util.stripHTML(newPost.excerpt),
+            message: newPost.excerpt || util.stripHTML(newPost.excerpt), // trying with excerpt
             target_url: newPost.permalink,
             image: newPost.cover || config.image,
             categories: newPost.categories.data.map(v => v.name),
@@ -178,15 +178,15 @@ if (config.enable) {
             }
 
             const payloadTemplate = {
-                name: newPostLocal.title,
-                title: newPostLocal.title,
-                message: newPostLocal.message,
-                target_url: newPostLocal.target_url,
-                image: newPostLocal.image,
-                icon: config.icon,
-                auto_hide: newPostLocal.auto_hide,
-                expire_push: newPostLocal.expire,
-                action_buttons: actionButtons,
+                "name": newPostLocal.title,
+                "title": newPostLocal.title,
+                "message": newPostLocal.message,
+                "target_url": newPostLocal.target_url,
+                "image": newPostLocal.image,
+                "icon": config.icon,
+                "auto_hide": newPostLocal.auto_hide,
+                "expire_push": newPostLocal.expire,
+                "action_buttons": actionButtons,
             };
 
             const delay = config.delay;
@@ -213,7 +213,7 @@ if (config.enable) {
             };
 
             hexo.log.info('hexo-webpushr-notification: The article update is being pushed, please wait.');
-            hexo.log.info('hexo-webpushr-notification: The following is the push content:', payload);
+            // hexo.log.info('hexo-webpushr-notification: The following is the push content:', payload); // for debug
 
             axios.post(`https://api.webpushr.com/v1/notification/send/${endpoint}`, payload, { headers })
                 .then(res => {

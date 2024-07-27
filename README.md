@@ -5,27 +5,27 @@
 ## 注意
 
 > 若您从旧版本升级至最新版本，请注意查看配置项变更及简化
-> 主要是 `action_buttons` 配置的自定义程度更高，当然您可以继续使用原配置方式
 
-当文章头设置 `webpushr: false` 时，可关闭本篇文章推送，此参数主要防止久远文章更新推送
-
-目前的代码未对字符串长度做限制及，具体可[前往官方文档查看](https://docs.webpushr.com/send-push-to-a-segment)，但我们一般不会超过这些限制，主要是注意 `文章描述/链接` 不要超过 `255` 字符串，其余参数 `文章标题，按钮标题/链接等` 不要超过 `100` 字符串
+1. 主要是 `action_buttons` 配置的自定义程度更高，当然您可以继续使用原配置方式
+2. 当文章头设置 `webpushr: false` 时，可关闭本篇文章推送，此参数主要防止久远文章更新推送
+3. 目前的代码未对字符串长度做限制及，具体可[前往官方文档查看](https://docs.webpushr.com/send-push-to-a-segment)，但我们一般不会超过这些限制，主要是注意 `文章描述/链接` 不要超过 `255` 字符串，其余参数 `文章标题，按钮标题/链接等` 不要超过 `100` 字符串
 
 ## 安装
 
-![node-current](https://img.shields.io/node/v/hexo?label=%E6%8E%A8%E8%8D%90&logo=node.js&style=for-the-badge)
+![node-current-hexo](https://img.shields.io/node/v/hexo?label=Hexo%20%E8%A6%81%E6%B1%82&logo=node.js&style=for-the-badge) ![node-current](https://img.shields.io/node/v/hexo-webpushr-notification?label=%E6%9C%AC%E6%8F%92%E4%BB%B6%E6%8E%A8%E8%8D%90&logo=node.js&style=for-the-badge)
 
-为方便后续更新，推荐使用 `npm` 以插件形式安装
+
+为方便后续更新，推荐使用 `NPM` 以插件形式安装
 
 [![npm version](https://img.shields.io/npm/v/hexo-webpushr-notification?color=red&logo=npm)](https://www.npmjs.com/package/hexo-webpushr-notification/v/latest) [![npm (beta)](https://img.shields.io/npm/v/hexo-webpushr-notification/beta?logo=npm)](https://www.npmjs.com/package/hexo-webpushr-notification/v/beta) [![npm download](https://img.shields.io/npm/dw/hexo-webpushr-notification?logo=npm)](https://www.npmjs.com/package/hexo-webpushr-notification)
 
-正式版
+### 正式版
 
 ```bash
 npm i hexo-webpushr-notification
 ```
 
-测试版
+### 测试版
 
 ```bash
 npm i hexo-webpushr-notification@beta
@@ -41,11 +41,11 @@ npm i github:Rock-Candy-Tea/hexo-webpushr-notification
 
 ## 使用
 
-如果你想了解推送效果，或者如何获取`key`可前往博客查看[文档](https://blog.ccknbc.cc/posts/hexo-webpushr-notification/)，否则建议您直接优先选择查看`GitHub`配置，因为博客配置内容不会及时更新
+如果你想了解推送效果，或者如何获取 `key` 可前往博客查看[文档](https://blog.ccknbc.cc/posts/hexo-webpushr-notification/)，否则建议您直接优先选择前往 [GitHub](https://github.com/Rock-Candy-Tea/hexo-webpushr-notification#readme) 或 [NPM](https://www.npmjs.com/package/hexo-webpushr-notification?activeTab=readme) 查看配置，因为博客内容不会及时更新
 
 ## 配置
 
-在 hexo 配置文件`_config.yml`粘贴如下内容，并按需配置
+在 hexo 配置文件 `_config.yml` 粘贴如下内容，并按需配置
 
 ```yaml
 webpushr:
@@ -75,6 +75,7 @@ webpushr:
       url: https://blog.ccknbc.cc/sub/
     # 当 action_buttons 未定义时也默认保留了一个“前往查看”按钮，除非设置为 false
     # action_buttons: false # 当设为 false 则不显示额外的按钮，因为隐藏按钮即为当前文章链接
+    # 不推荐配置三个以上按钮，会自动截断前三个
 
   # 以下配置为按订阅主题推送给不同订阅用户，请按照数组形式，一一对应，具体位置请看使用文档
   categories: [工作, 博客, 工具, 生活, 音乐, 学习]
@@ -95,7 +96,7 @@ webpushr:
 
 因官方 sw 脚本注册后，我们无法注册自己的 sw 脚本，但官方提供了配置，方便我们使用 sw 的缓存，拦截请求等功能
 
-需要在配置项中额外添加`sw_self: true`配置，开启自行注册 sw（默认用户不用管或者设为`false`）
+需要在配置项中额外添加 `sw_self: true` 配置，开启自行注册 sw（默认用户不用管或者设为 `false` ）
 
 ```yaml
 webpushr:
@@ -118,7 +119,7 @@ importScripts("https://cdn.webpushr.com/sw-server.min.js");
 
 你也可以自定义修改 `webpushr.js` 文件后，再安装相关需要依赖，然后将文件放到 Hexo 的 `scripts` 目录下即可正常运行
 
-对于 0.2.0 以上版本，您只需要在 Hexo 所在目录安装 `axios` 即可，这样测试相较于安装 `GitHub` 更方便（以及欢迎 `PR` ）
+对于 `0.2.0` 及以上版本，您只需要在 Hexo 所在目录安装 `axios` 即可，这样测试相较于安装 `GitHub` 更方便（以及欢迎 `PR` ）
 
 ```bash
 npm i axios

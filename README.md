@@ -2,6 +2,13 @@
 
 本仓库/插件 内容根据 **[原仓库](https://github.com/glazec/hexo-web-push-notification)** 进行修改，感谢原作者 **[@glazec](https://github.com/glazec)**
 
+
+<center>
+
+[中文文档](/README.md) | [English](/README-EN.md)
+
+</center>
+
 ## 注意
 
 > 若您从旧版本升级至最新版本，请注意查看配置项变更及简化
@@ -62,7 +69,7 @@ webpushr:
   # 如果您的仓库私有，则无需担心此问题
 
   trackingCode: "trackingCode"
-  icon: "https://.../192.png" # 必须为 HTTPS 以及 192*192 png图片
+  icon: "https://.../192.png" # 必须为 HTTPS 以及 192*192 png 格式图片
   # auto_hide: false # 默认为 1，代表true，即自动隐藏
   # sort: "date" # 默认为updated，即只要最新文章更改了更新时间即推送新文章，改为date即文章第一次发布时间
   # delay: "0" # 延时推送，考虑到CDN缓存更新，默认定时为在 hexo d 10分钟后推送，单位为分钟（最短延时为5分钟，设置 0 则会立即推送）

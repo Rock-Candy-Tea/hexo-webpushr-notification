@@ -1,6 +1,6 @@
 {
   "name": "hexo-webpushr-notification",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Hexo Push Posts Update Notification Automatically With Webpushr",
   "main": "webpushr.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "ccknbc",
   "license": "ISC",
   "dependencies": {
-    "axios": "1.7.2"
+    "axios": "1.7.5"
   },
   "url": "https://blog.ccknbc.cc",
   "email": "blog@ccknbc.cc",
